@@ -18,13 +18,11 @@ class UsuarioProvider {
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$_firebaseToken',
         body: json.encode(authData));
     Map<String, dynamic> decodedResp = json.decode(resp.body);
-    print(decodedResp);
     if (decodedResp.containsKey('idToken')) {
-      //Salvaar el token en el storage
      _prefs.token = decodedResp['idToken'];
       return {'ok': true, 'token': decodedResp['idToken']};
     } else {
-      return {'ok': true, 'mensaje': decodedResp['error']['message']};
+      return {'ok': false, 'mensaje': decodedResp['error']['message']};
     }
   }
 
@@ -39,12 +37,11 @@ class UsuarioProvider {
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$_firebaseToken',
         body: json.encode(authData));
     Map<String, dynamic> decodedResp = json.decode(resp.body);
-    //print(decodedResp);
     if (decodedResp.containsKey('idToken')) {
       _prefs.token = decodedResp['idToken'];
       return {'ok': true, 'token': decodedResp['idToken']};
     } else {
-      return {'ok': true, 'mensaje': decodedResp['error']['message']};
+      return {'ok': false, 'mensaje': decodedResp['error']['message']};
     }
   }
 }

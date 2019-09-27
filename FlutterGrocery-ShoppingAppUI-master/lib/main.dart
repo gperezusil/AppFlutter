@@ -3,7 +3,6 @@ import 'package:fryo/src/bloc/provider.dart';
 import 'package:fryo/src/preferencias_usuario/preferencias_ususario.dart';
 import './src/screens/SignInPage.dart';
 import './src/screens/SignUpPage.dart';
-import './src/screens/HomePage.dart';
 import './src/screens/Dashboard.dart';
 import './src/screens/ProductPage.dart';
 

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:fryo/src/screens/GeoMaps.dart';
 import '../shared/styles.dart';
 import '../shared/colors.dart';
 import '../shared/fryo_icons.dart';
@@ -8,7 +11,7 @@ import '../shared/partials.dart';
 
 class Dashboard extends StatefulWidget {
   final String pageTitle;
-
+  
   Dashboard({Key key, this.pageTitle}) : super(key: key);
 
   @override
@@ -22,7 +25,10 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     final _tabs = [
       storeTab(context),
-      Text('Tab2'),
+      Container(
+                  alignment: Alignment.center,
+                  child: GeoMaps(),
+                ),
       Text('Tab3'),
       Text('Tab4'),
       Text('Tab5'),
@@ -40,7 +46,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           backgroundColor: primaryColor,
           title:
-              Text('Fryo', style: logoWhiteStyle, textAlign: TextAlign.center),
+              Text('EsSalud', style: logoWhiteStyle, textAlign: TextAlign.center),
           actions: <Widget>[
             IconButton(
               padding: EdgeInsets.all(0),
@@ -60,33 +66,28 @@ class _DashboardState extends State<Dashboard> {
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Fryo.shop),
+                icon: Icon(Fryo.chart_bars),
                 title: Text(
-                  'Store',
+                  'Graficos',
                   style: tabLinkStyle,
                 )),
             BottomNavigationBarItem(
-                icon: Icon(Fryo.cart),
+                icon: Icon(Fryo.location),
                 title: Text(
-                  'My Cart',
+                  'Geo',
                   style: tabLinkStyle,
                 )),
-            BottomNavigationBarItem(
-                icon: Icon(Fryo.heart_1),
-                title: Text(
-                  'Favourites',
-                  style: tabLinkStyle,
-                )),
+            
             BottomNavigationBarItem(
                 icon: Icon(Fryo.user_1),
                 title: Text(
-                  'Profile',
+                  'Cuenta',
                   style: tabLinkStyle,
                 )),
             BottomNavigationBarItem(
                 icon: Icon(Fryo.cog_1),
                 title: Text(
-                  'Settings',
+                  'Configuracion',
                   style: tabLinkStyle,
                 ))
           ],
@@ -285,7 +286,7 @@ Widget sectionHeader(String headerTitle, {onViewMore}) {
         margin: EdgeInsets.only(left: 15, top: 2),
         child: FlatButton(
           onPressed: onViewMore,
-          child: Text('View all ›', style: contrastText),
+          child: Text('Ver mas  ›', style: contrastText),
         ),
       )
     ],
@@ -298,18 +299,16 @@ Widget headerTopCategories() {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
-      sectionHeader('All Categories', onViewMore: () {}),
+      sectionHeader('Todas las Categorias', onViewMore: () {}),
       SizedBox(
         height: 130,
         child: ListView(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           children: <Widget>[
-            headerCategoryItem('Frieds', Fryo.dinner, onPressed: () {}),
-            headerCategoryItem('Fast Food', Fryo.food, onPressed: () {}),
-            headerCategoryItem('Creamery', Fryo.poop, onPressed: () {}),
-            headerCategoryItem('Hot Drinks', Fryo.coffee_cup, onPressed: () {}),
-            headerCategoryItem('Vegetables', Fryo.leaf, onPressed: () {}),
+            headerCategoryItem('Personal', Fryo.users, onPressed: () {}),
+            headerCategoryItem('Bienes', Fryo.money, onPressed: () {}),
+            headerCategoryItem('Servicios', Fryo.location_1, onPressed: () {}),
           ],
         ),
       )
