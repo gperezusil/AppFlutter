@@ -1,7 +1,9 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fryo/main.dart';
+import 'package:fryo/src/preferencias_usuario/preferencias_ususario.dart';
 import 'package:fryo/src/screens/GeoMaps.dart';
+import 'package:page_transition/page_transition.dart';
 import '../shared/styles.dart';
 import '../shared/colors.dart';
 import '../shared/fryo_icons.dart';
@@ -20,7 +22,8 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int _selectedIndex = 0;
-
+  final prefs = new PreferenciasUsuario();
+  
   @override
   Widget build(BuildContext context) {
     final _tabs = [
@@ -29,7 +32,19 @@ class _DashboardState extends State<Dashboard> {
                   alignment: Alignment.center,
                   child: GeoMaps(),
                 ),
-      Text('Tab3'),
+      
+      RaisedButton(
+         child: Text('Salir') ,
+        onPressed: (){
+          prefs.token=null;
+           Navigator.pushReplacement(
+          context,
+          PageTransition(
+              type: PageTransitionType.rotate,
+              duration: Duration(seconds: 1),
+              child: MyApp()));
+          },
+      ),
       Text('Tab4'),
       Text('Tab5'),
     ];

@@ -9,12 +9,18 @@ import 'package:fryo/src/util/utils.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:progress_dialog/progress_dialog.dart';
 
+ProgressDialog processDialog;
 class SignInPage extends StatelessWidget {
   final usuarioProvider = new UsuarioProvider();
+  
 
   @override
   Widget build(BuildContext context) {
+   
+     processDialog = ProgressDialog(context,type: ProgressDialogType.Normal);
+      processDialog.style(message: 'Iniciando Sesion');
     return Scaffold(
         body: Stack(
       children: <Widget>[
@@ -23,7 +29,6 @@ class SignInPage extends StatelessWidget {
       ],
     ));
   }
-
   Widget _loginForm(BuildContext context) {
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
@@ -125,13 +130,19 @@ class SignInPage extends StatelessWidget {
             elevation: 0.0,
             color: Colors.blue,
             textColor: Colors.white,
-            onPressed: snapshot.hasData ? () => _login(bloc, context) : null);
+            onPressed: snapshot.hasData ? () 
+            =>  _login(bloc, context) : null
+            );
+             
       },
     );
   }
 
   _login(LoginBloc bloc, BuildContext context) async {
-    Map info = await usuarioProvider.login(bloc.email, generarMD5(bloc.password));
+    processDialog.show();
+     Map info = await usuarioProvider.login(bloc.email, generarMD5(bloc.password));
+     Future.delayed(Duration(seconds: 1)).then((value) {
+        processDialog.hide().whenComplete((){
     if (info['ok']) {
       Navigator.pushReplacement(
           context,
@@ -139,9 +150,15 @@ class SignInPage extends StatelessWidget {
               type: PageTransitionType.rotate,
               duration: Duration(seconds: 1),
               child: Dashboard()));
+              
     } else {
       mostrarAlerta(context,info['mensaje']);
-    }
+       }
+        });
+     });
+   /* 
+    */
+   
   }
 
   String generarMD5(String pass){
@@ -190,4 +207,5 @@ class SignInPage extends StatelessWidget {
       ],
     );
   }
+  
 }

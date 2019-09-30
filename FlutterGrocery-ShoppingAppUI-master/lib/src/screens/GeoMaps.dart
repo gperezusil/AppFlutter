@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'package:flutter/rendering.dart';
+import 'package:fryo/src/api/apiCalls.dart';
+import 'package:fryo/src/models/country.dart';
 import 'package:geolocator/geolocator.dart' as prefix0;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 
 class GeoMaps extends StatefulWidget {
   @override
@@ -16,6 +16,7 @@ class CourseListState extends State<GeoMaps> {
   PermissionStatus _status;
   String buscarDireccion;
   GoogleMapController mapController;
+  final ApiCalls apiCalls = ApiCalls();
 
   @override
   void initState() {
@@ -65,13 +66,38 @@ class CourseListState extends State<GeoMaps> {
   Stack mapa() {
     return Stack(
       children: <Widget>[
-        GoogleMap(
+        FutureBuilder<List<Country>>(
+           future: apiCalls.getCountries(),
+            builder: (BuildContext context, AsyncSnapshot<List<Country>> snapshot) {
+               if(!snapshot.hasData){
+                return CircularProgressIndicator();
+              }else {
+        return GoogleMap(
           onMapCreated: onMapCreated,
           initialCameraPosition: CameraPosition(
               target: LatLng(-12.0431800,-77.0282400), zoom: 5.0),
+                  markers: {
+                  for (Country country in snapshot.data)
+                    if (country.latlng.length > 0)
+                      Marker(
+                        markerId: MarkerId(country.name),
+                        /*onTap: () {
+                          setState(() {
+                            details.clear();
+                            _bottomSize = _screenHeight * .5;
+                          });
+                        },*/
+                        position: LatLng(
+                          country.latlng[0],
+                          country.latlng[1],
+                        ),
+                      ),
+                },
+                myLocationButtonEnabled: false,
+        );}}
         ),
         Positioned(
-          top: 30.0,
+          top: 10.0,
           right: 15.0,
           left: 15.0,
           child: Container(
@@ -81,7 +107,7 @@ class CourseListState extends State<GeoMaps> {
                 borderRadius: BorderRadius.circular(10.0), color: Colors.white),
             child: TextField(
               decoration: InputDecoration(
-                  hintText: 'Ingrese Direccion',
+                  hintText: 'Ingrese Establecimiento',
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
                   suffixIcon: IconButton(
@@ -90,7 +116,7 @@ class CourseListState extends State<GeoMaps> {
                       onPressed: barraBusqueda,
                       iconSize: 30.0,
                       padding: EdgeInsets.only(bottom: 5.0),
-                    ),
+                    ), onPressed: () {},
                   )
                   ),
               onChanged: (val) {
